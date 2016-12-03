@@ -48,6 +48,16 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator {
 
 
 
+  protected function registerArrayKey($key) {
+    if (array_search($key, $this->keys) === false) $this->keys[] = $key;
+  }
+  protected function unregsiterArrayKey($key) {
+    if (($k = array_search($key, $this->keys)) !== false) unset($this->keys[$k]);
+  }
+
+
+
+
 
   // ArrayAccess methods
 
@@ -59,12 +69,13 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator {
   }
   public function offsetSet($offset, $value) {
     $this->elements[$offset] = $value;
-    if (array_search($offset, $this->keys) === false) $this->keys[] = $offset;
+    $this->registerArrayKey($offset);
+    return;
   }
   public function offsetUnset($offset) {
     unset($this->elements[$offset]);
-    $k = array_search($offset, $this->keys);
-    if ($k !== false) unset($this->keys[$k]);
+    $this->unregisterArrayKey($offset);
+    return;
   }
 
 
