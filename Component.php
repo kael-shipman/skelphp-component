@@ -40,6 +40,11 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator {
     return $this->template->render($elements);
   }
 
+  public function __clone() {
+    $this->template = clone $this->template;
+    $this->rewind();
+  }
+
 
 
 
