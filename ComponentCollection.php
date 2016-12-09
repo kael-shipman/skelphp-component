@@ -43,6 +43,14 @@ class ComponentCollection extends Component implements Interfaces\ComponentColle
     return $result;
   }
 
+  public function getColumn(string $key) {
+    $result = array();
+    foreach($this as $e) {
+      $result[] = $e[$key];
+    }
+    return $result;
+  }
+
 
 
 
