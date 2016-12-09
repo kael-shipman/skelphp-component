@@ -3,27 +3,44 @@ namespace Skel;
 
 class ComponentCollection extends Component implements Interfaces\ComponentCollection {
   public function pop() {
-    return array_pop($this->elements);
+    if (($k = count($this->keys)) == 0) return null;
+    $k = $this->keys[$k-1];
+    $v = $this->elements[$k];
+    $this->offsetUnset($k);
+    return $v;
   }
 
   public function shift() {
-    return array_shift($this->elements);
+    if (count($this->keys) == 0) return null;
+    $k = $this->keys[0];
+    $v = $this->elements[$k];
+    $this->offsetUnset($k);
+    return $v;
   }
 
   public function unshift(Interfaces\Component $c) {
+    $this->keys[] = count($this->keys);
     return array_unshift($this->elements, $c);
   }
 
   public function remove(Interfaces\Component $c) {
     $i = $this->indexOf($c);
-    if ($i !== null) unset($this->elements[$i]);
+    if ($i !== null) $this->offsetUnset($i);
   }
 
   public function indexOf(Interfaces\Component $c) {
-    for ($i = 0; $i < count($this->elements); $i++) {
-      if ($this->elements[$i] == $c) return $i;
+    foreach($this as $k => $colComp) {
+      if ($colComp == $c) return $k;
     }
     return null;
+  }
+
+  public function filter(string $key, $val) {
+    $result = array();
+    foreach($this as $e) {
+      if ($e[$key] === $val) $result[] = $e;
+    }
+    return $result;
   }
 
 
@@ -45,7 +62,7 @@ class ComponentCollection extends Component implements Interfaces\ComponentColle
   }
 
   public function offsetSet($offset, $value) {
-    if (!($value instanceof Interfaces\Component)) throw new \InvalidArgumentException("All elements in a ComponentCollection object must be implement \Skel\Interfaces\Component.");
+    if (!($value instanceof Interfaces\Component)) throw new \InvalidArgumentException("All elements in a ComponentCollection object must implement \Skel\Interfaces\Component.");
     if (!is_int($offset)) {
       foreach($this as $k => $v) $v[$offset] = $value;
       return;
