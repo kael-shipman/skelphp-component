@@ -1,6 +1,6 @@
 {
   "name" : "skel/templating",
-  "description" : "This is a library that provides various elements pertaining to templating. At the time of this writing, it's highly focused on pairing data objects with templates, so it contains several classes that provide templatable interfaces to objects that can be restored from and persisted to a database. However, this persistence layer is not provided by this library, rather by the \Skel\Cms library.",
+  "description" : "This is a library that provides various elements pertaining to templating. At the time of this writing, it's highly focused on pairing data objects with templates, so it contains several classes that provide templatable interfaces to objects that can be restored from and persisted to a database. However, this persistence layer is not provided by this library, rather by the \\Skel\\Cms library.",
   "type" : "library",
   "keywords" : ["templating", "dbal", "data abstraction", "template", "coupling"],
   "license" : "GPL3",
