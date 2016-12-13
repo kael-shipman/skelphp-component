@@ -83,3 +83,5 @@ class ComponentCollection extends Component implements Interfaces\ComponentColle
     parent::offsetSet($offset, $value);
   }
 }
+
+

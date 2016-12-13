@@ -51,7 +51,7 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator, \
   protected function registerArrayKey($key) {
     if (array_search($key, $this->keys) === false) $this->keys[] = $key;
   }
-  protected function unregsiterArrayKey($key) {
+  protected function unregisterArrayKey($key) {
     if (($k = array_search($key, $this->keys)) !== false) unset($this->keys[$k]);
   }
 
