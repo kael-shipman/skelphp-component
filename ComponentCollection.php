@@ -51,6 +51,10 @@ class ComponentCollection extends Component implements Interfaces\ComponentColle
     return $result;
   }
 
+  public function contains(string $key, $val) {
+    return count($this->filter($key, $val)) != 0;
+  }
+
 
 
 
@@ -71,6 +75,7 @@ class ComponentCollection extends Component implements Interfaces\ComponentColle
 
   public function offsetSet($offset, $value) {
     if (!($value instanceof Interfaces\Component)) throw new \InvalidArgumentException("All elements in a ComponentCollection object must implement \Skel\Interfaces\Component.");
+    if ($offset === null) $offset = count($this);
     if (!is_int($offset)) {
       foreach($this as $k => $v) $v[$offset] = $value;
       return;

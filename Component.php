@@ -1,7 +1,7 @@
 <?php
 namespace Skel;
 
-class Component implements Interfaces\Component, \JsonSerializable, \Iterator {
+class Component implements Interfaces\Component, \JsonSerializable, \Iterator, \Countable {
   protected $keys = array();
   protected $currentKey = null;
   protected $template;
@@ -68,6 +68,7 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator {
     return $this->elements[$offset];
   }
   public function offsetSet($offset, $value) {
+    if ($offset === null) $offset = count($this);
     $this->elements[$offset] = $value;
     $this->registerArrayKey($offset);
     return;
@@ -82,9 +83,14 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator {
   // Iterator methods
 
   public function rewind() { $this->currentKey = 0; }
-  public function current() { return $this->elements[$this->keys[$this->currentKey]]; }
+  public function current() { return $this[$this->keys[$this->currentKey]]; }
   public function key() { return $this->keys[$this->currentKey]; }
   public function next() { $this->currentKey++; }
   public function valid() { return array_key_exists($this->currentKey, $this->keys); }
+
+
+  // Countable
+
+  public function count() { return count($this->elements); }
 }
 
