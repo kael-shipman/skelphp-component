@@ -9,7 +9,7 @@ class PowerTemplate implements Interfaces\Template {
   public function render(array $elmts) {
     foreach ($elmts as $field => $val) $$field = $val;
     ob_start();
-    $success = @include $this->path;
+    $success = include $this->path;
     if (!$success) throw new \RuntimeException("Template file `$this->path` not found!");
     $result = ob_get_contents();
     ob_end_clean();
