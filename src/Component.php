@@ -34,6 +34,7 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator, \
   }
 
   public function __toString() {
+    if (!$this->template) throw new \Skel\UnpreparedObjectException("You must set a template in order to render a component. You can pass any valid \Skel\Interfaces\Template object as the second argument of the constructor for a Component, or you can use the `setTemplate` method to set or change the template after the object is instatiated.");
     $elements = array();
     foreach($this as $k => $e) $elements[$k] = $e;
     $elements['component'] = $this;
