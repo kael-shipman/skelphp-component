@@ -18,17 +18,7 @@ class StringTemplate implements Interfaces\Template {
     $result = $this->templateStr;
     $vars = array();
 
-    // Using a string function instead of regexes for performance reasons
-    //while(preg_match('/##(.+?)##/', $result, $vars)) $result = str_replace($vars[0], (string)$elmts[$vars[1]], $result);
-    $offset = 0;
-    while (($startvar = strpos($result, '##', $offset)) !== false) {
-      $endvar = strpos($result, '##', $startvar+2);
-      $var = substr($result, $startvar+2, $endvar-($startvar+2));
-      $result = str_replace("##$var##", (string)$elmts[$var], $result);
-
-      // Set offset to beginning of replaced string so that we can catch any new variables inserted
-      $offset = $startvar;
-    }
+    while(preg_match('/##([a-zA-Z0-9_-]+?)##/', $result, $vars)) $result = str_replace($vars[0], (string)$elmts[$vars[1]], $result);
 
     return $result;
   }
