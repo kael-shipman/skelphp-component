@@ -3,6 +3,7 @@ namespace Skel;
 
 class StringTemplate implements Interfaces\Template {
   protected $templateStr = '';
+  protected $delim = '##';
 
   public function __construct(string $template, bool $isFile=true) {
     if ($isFile){
@@ -12,13 +13,15 @@ class StringTemplate implements Interfaces\Template {
     } else {
       $this->templateStr = $template;
     }
+    $this->escapeDelim();
   }
 
   public function render(array $elmts) {
     $result = $this->templateStr;
     $vars = array();
 
-    while(preg_match('/##([a-zA-Z0-9_-]+?)##/', $result, $vars)) $result = str_replace($vars[0], (string)$elmts[$vars[1]], $result);
+    $regex = $this->getSubRegex();
+    while(preg_match($regex, $result, $vars)) $result = str_replace($vars[0], (string)$elmts[$vars[1]], $result);
 
     return $result;
   }
@@ -30,6 +33,18 @@ class StringTemplate implements Interfaces\Template {
 
   public function __toString() {
     return $this->templateStr;
+  }
+
+  protected function getSubRegex() {
+    $cap = ($this->delim[0] == '/') ? '#' : '/';
+    return $cap.$this->delim.'([a-zA-Z0-9_-]+?)'.$this->delim.$cap;
+  }
+
+  protected function escapeDelim() {
+    $raw = array('[', ']', '{', '}', '*', '?', '+','$','^');
+    $escaped = array('\\[', '\\]', '\\{', '\\}', '\\*', '\\?', '\\+','\\$','\\^');
+    $this->delim = str_replace($escaped, $raw, $this->delim);
+    $this->delim = str_replace($raw, $escaped, $this->delim);
   }
 }
 

@@ -17,7 +17,8 @@
     "skel/header" : "~0.0"
   },
   "require-dev" : {
-    "phpunit/phpunit" : "~5"
+    "phpunit/phpunit" : "~5",
+    "skel/lang-parser" : "~0.1"
   },
   "autoload" : {
     "psr-4" : {
