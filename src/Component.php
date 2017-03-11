@@ -6,11 +6,13 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator, \
   protected $currentKey = null;
   protected $template;
   protected $elements = array();
+  protected $context;
 
-  public function __construct(array $elements=array(), Interfaces\Template $template=null) {
+  public function __construct(array $elements=array(), Interfaces\Template $template=null, Interfaces\Context $context=null) {
     if ($elements) $this->setElements($elements);
     $this->rewind();
     $this->template = $template;
+    $this->context = $context;
   }
 
   public function getTemplate() { return $this->template; }
@@ -31,6 +33,18 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator, \
   public function setTemplate(Interfaces\Template $template) {
     $this->template = $template;
     return $this;
+  }
+
+  public function setContext(Interfaces\Context $c) {
+    $this->context = $c;
+    return $this;
+  }
+
+  public function getContext() { return $this->context; }
+
+  public function url(string $url) {
+    if (!$this->context || !($this->context instanceof \Skel\Interfaces\App)) throw new \Skel\UnpreparedObjectException("You must set a context that implements `\Skel\Interfaces\App` for this component via the `setContext` method before trying to get a resource URL. This is because `getResourceUrl` is a passthrough method that passes the call along to its context.");
+    return $this->context->getUrlFor($url);
   }
 
   public function __toString() {
