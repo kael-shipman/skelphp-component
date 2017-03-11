@@ -3,7 +3,7 @@ namespace Skel;
 
 class StringTemplate implements Interfaces\Template {
   protected $templateStr = '';
-  protected $delim = '##';
+  protected $delim = '@@';
 
   public function __construct(string $template, bool $isFile=true) {
     if ($isFile){
@@ -33,6 +33,11 @@ class StringTemplate implements Interfaces\Template {
 
   public function __toString() {
     return $this->templateStr;
+  }
+
+  public function setDelim(string $delim) {
+    $this->delim = $delim;
+    $this->escapeDelim();
   }
 
   protected function getSubRegex() {

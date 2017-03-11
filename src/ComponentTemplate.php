@@ -38,10 +38,5 @@ class ComponentTemplate extends \Skel\StringTemplate {
     $cap = ($this->delim[0] == '/') ? '#' : '/';
     return $cap.$this->delim.'([a-zA-Z0-9_-]+(\\(.+\\))?)'.$this->delim.$cap;
   }
-
-  public function setVarDelimiter(string $delim) {
-    $this->delim = $delim;
-    $this->escapeDelim();
-  }
 }
 
