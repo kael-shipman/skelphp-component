@@ -13,7 +13,7 @@ class ComponentTemplate extends \Skel\StringTemplate {
     if (!array_key_exists('component', $elmts) || !($elmts['component'] instanceof \Skel\Interfaces\Component)) throw new \InvalidArgumentException("You must include a reference to a valid `Component` object among the elements that you pass into `render`");
     if (!$this->langParser) throw new UnpreparedObjectException("`ComponentTemplate` objects must be given a `LangParser` instance in order to render. You must pass a valid `LangParser` instance to this object via `setLangParser` BEFORE attempting to render.");
 
-    $result = $this->templateStr;
+    $result = $this->getTemplateStr();
     $vars = array();
 
     $regex = $this->getSubRegex();

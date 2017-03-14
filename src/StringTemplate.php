@@ -2,14 +2,14 @@
 namespace Skel;
 
 class StringTemplate implements Interfaces\Template {
-  protected $templateStr = '';
+  protected $templatePath;
+  protected $templateStr;
   protected $delim = '@@';
 
   public function __construct(string $template, bool $isFile=true) {
     if ($isFile){
-      if (!($this->templateStr = @file_get_contents($template))) {
-        throw new NonexistentFileException("File `$template` doesn't exist!");
-      }
+      if (!file_exists($template)) throw new NonexistentFileException("File `$template` doesn't exist!");
+      $this->templatePath = $template;
     } else {
       $this->templateStr = $template;
     }
@@ -17,7 +17,7 @@ class StringTemplate implements Interfaces\Template {
   }
 
   public function render(array $elmts) {
-    $result = $this->templateStr;
+    $result = $this->getTemplateStr();
     $vars = array();
 
     $regex = $this->getSubRegex();
@@ -32,7 +32,7 @@ class StringTemplate implements Interfaces\Template {
   }
 
   public function __toString() {
-    return $this->templateStr;
+    return $this->getTemplateStr();
   }
 
   public function setDelim(string $delim) {
@@ -50,6 +50,11 @@ class StringTemplate implements Interfaces\Template {
     $escaped = array('\\[', '\\]', '\\{', '\\}', '\\*', '\\?', '\\+','\\$','\\^');
     $this->delim = str_replace($escaped, $raw, $this->delim);
     $this->delim = str_replace($raw, $escaped, $this->delim);
+  }
+
+  protected function getTemplateStr() {
+    if ($this->templateStr === null) $this->templateStr = file_get_contents($this->templatePath);
+    return $this->templateStr;
   }
 }
 
