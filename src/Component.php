@@ -4,6 +4,7 @@ namespace Skel;
 class Component implements Interfaces\Component, \JsonSerializable, \Iterator, \Countable {
   protected $keys = array();
   protected $currentKey = null;
+  protected $templateName;
   protected $template;
   protected $elements = array();
   protected $context;
@@ -37,6 +38,7 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator, \
 
   public function setContext(Interfaces\Context $c) {
     $this->context = $c;
+    if ($this->templateName && ($this->context instanceof Interfaces\App)) $this->setTemplate($c->getTemplate($this->templateName));
     return $this;
   }
 
@@ -45,6 +47,12 @@ class Component implements Interfaces\Component, \JsonSerializable, \Iterator, \
   public function url(string $url) {
     if (!$this->context || !($this->context instanceof \Skel\Interfaces\App)) throw new \Skel\UnpreparedObjectException("You must set a context that implements `\Skel\Interfaces\App` for this component via the `setContext` method before trying to get a resource URL. This is because `getResourceUrl` is a passthrough method that passes the call along to its context.");
     return $this->context->getUrlFor($url);
+  }
+
+  public function exportArray() {
+    $array = array();
+    foreach($this as $k => $v) $array[$k] = $v;
+    return $array;
   }
 
   public function __toString() {
