@@ -3,6 +3,10 @@
 use PHPUnit\Framework\TestCase;
 
 class ComponentTests extends TestCase {
+  public function testCanCreateComponent() {
+    $c = new \Skel\Component();
+  }
+
   public function testRemoveObjectFromCollection() {
     $c = new \Skel\ComponentCollection();
     for($i=0; $i < 10; $i++) $c[] = new \Skel\Component(array('name' => 'test'.$i, 'value' => $i));
