@@ -30,7 +30,7 @@ class ComponentCollection extends Component implements Interfaces\ComponentColle
 
   public function indexOf(Interfaces\Component $c) {
     foreach($this as $k => $colComp) {
-      if ($colComp == $c) return $k;
+      if ($colComp === $c) return $k;
     }
     return null;
   }
@@ -46,7 +46,8 @@ class ComponentCollection extends Component implements Interfaces\ComponentColle
   public function getColumn(string $key) {
     $result = array();
     foreach($this as $e) {
-      $result[] = $e[$key];
+      if (!isset($e[$key])) $result[] = null;
+      else $result[] = $e[$key];
     }
     return $result;
   }
@@ -81,6 +82,23 @@ class ComponentCollection extends Component implements Interfaces\ComponentColle
       return;
     }
     parent::offsetSet($offset, $value);
+  }
+
+  public function offsetUnset($offset) {
+      $last = $offset == count($this->elements)-1;
+      parent::offsetUnset($offset);
+      if (!$last) {
+          $newElements = array();
+          foreach($this->elements as $k=>$v) {
+              if ($k < $offset) $newElements[$k] = $v;
+              else $newElements[$offset++] = $v;
+          }
+          $this->elements = $newElements;
+
+          // Reset keys
+          $this->keys = array();
+          for ($i = 0; $i < count($this->elements); $i++) $this->keys[] = $i;
+      }
   }
 }
 
